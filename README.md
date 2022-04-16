@@ -1,6 +1,9 @@
 # Technical Challenge (Backend)
 This is an application which displays all jokes categories, all star wars people and search result from jokes and star wars people
 
+##Online version
+Application is successfully deploy to heroku and you can visit via https://zatec-backend.herokuapp.com/swagger-ui.html
+
 ## Content
 View Project Structure description and Instruction.
 
@@ -52,6 +55,3 @@ Instructions
     5. To run unit test, you can run the command on the terminal 'mvn test'
 
 ```
-
-##Online version
-Application is successfully deploy to heroku and you can visit via https://zatec-backend.herokuapp.com/swagger-ui.html
