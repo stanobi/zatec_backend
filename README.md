@@ -52,3 +52,6 @@ Instructions
     5. To run unit test, you can run the command on the terminal 'mvn test'
 
 ```
+
+##Online version
+Application is successfully deploy to heroku and you can visit via https://zatec-backend.herokuapp.com/swagger-ui.html
