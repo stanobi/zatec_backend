@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: Technical Challengae
+  description: Backend Service
+  version: 1.0.0
+  x-audience: external-public
+  x-api-id: 78e624f8-f73e-4bbe-a918-bda261fd13ec
+  contact:
+    name: zatec
+    url: http://www.zatec.com
+    email: info@zatec.com
+
+components:
+  responses:
+    CategoryStatusResponse:
+      description: this contains the joke categories
+      content:
+        application/json:
+          schema:
+            type: array
+            $ref: "#/components/schemas/CategoryResponse"
+    PeopleStatusResponse:
+      description: this contains the star wars people
+      content:
+        application/json:
+          schema:
+            type: array
+            $ref: "#/components/schemas/PeopleResponse"
+    SearchStatusResponse:
+      description: this contains search results from both jokes api and star wars people
+      content:
+        application/json:
+          schema:
+            type: array
+            $ref: "#/components/schemas/SearchResponse"
+
+  schemas:
+    CategoryResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: string
+    PeopleResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/People"
+    SearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            jokes:
+              type: array
+              items:
+                $ref: "#/components/schemas/Jokes"
+            people:
+              type: array
+              items:
+                $ref: "#/components/schemas/People"
+    Jokes:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+        icon_url:
+          type: string
+        id:
+          type: string
+        updated_at:
+          type: string
+        url:
+          type: string
+        value:
+          type: string
+    People:
+      type: object
+      properties:
+        name:
+          type: string
+        height:
+          type: string
+        mass:
+          type: string
+        hair_color:
+          type: string
+        skin_color:
+          type: string
+        eye_color:
+          type: string
+        birth_year:
+          type: string
+        gender:
+          type: string
+        homeworld:
+          type: string
+        films:
+          type: array
+          items:
+            type: string
+        species:
+          type: array
+          items:
+            type: string
+        vehicles:
+          type: array
+          items:
+            type: string
+        starships:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+        edited:
+          type: string
+        url:
+          type: string
+
+servers:
+  - url: 'http://localhost:8080'
+    description: locally served url
+tags:
+  - chuck
+  - swapi
+  - search
+
+paths:
+  /chuck/categories:
+    get:
+      summary: Get all joke categories
+      description: fetch all the joke categories from https://api.chucknorris.io/jokes/categories
+      operationId: getAllJokeCategories
+      tags:
+        - chuck
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/responses/CategoryStatusResponse"
+  /swapi/people:
+    get:
+      summary: Get all the star wars people
+      description: fetch all the star wars people from https://swapi.dev/api/people/
+      operationId: getAllStarWarsPeople
+      tags:
+        - swapi
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/responses/PeopleStatusResponse"
+  /search:
+    get:
+      summary: Get jokes or star wars search result
+      description: search against jokes api and star wars people api
+      operationId: getSearchResult
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          $ref: "#/components/responses/SearchStatusResponse"
