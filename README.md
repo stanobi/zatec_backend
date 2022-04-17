@@ -33,6 +33,9 @@ View Project Structure description and Instruction.
 ├──────── /openapi/src/main/java                    -> contains auto generated java codes from openapi yml file
 ├── .gitignore                                      -> contains all files and folder that shouldn't be pushed to git
 ├── pom.xml                                         -> file used to manage dependencies 
+├── Dockerfile                                      -> this is used to generate docker image 
+├── settings.xml                                    -> maven .m2 settings xml file used while building a docker image 
+├── system.properties                               -> heroku config file instructing heroku on the java version to be used. 
 └── README.md                                       -> application structure description and startup/setup guide
     
 Instructions 
@@ -53,5 +56,13 @@ Instructions
     4. To Test: we can test via swagger-ui by visiting any of the links provided in the step 3 and providing the parameter as required. 
 
     5. To run unit test, you can run the command on the terminal 'mvn test'
+    
+    6. You can also run application on docker, follow the instruction below.
+        a. Build the docker image by running this command on terminal. please take note of the full-stop, it is part of the command
+            docker build -t technical_challenge_backend .
+        b. After thats complete, you can start the application by running this command below
+            docker run -p 8080:8080 technical_challenge_backend
+        c. you can visit application via browser 
+            http://localhost:8080/swagger-ui.html
 
 ```
