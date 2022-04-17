@@ -17,22 +17,25 @@ components:
       content:
         application/json:
           schema:
-            type: array
             $ref: "#/components/schemas/CategoryResponse"
     PeopleStatusResponse:
       description: this contains the star wars people
       content:
         application/json:
           schema:
-            type: array
             $ref: "#/components/schemas/PeopleResponse"
     SearchStatusResponse:
       description: this contains search results from both jokes api and star wars people
       content:
         application/json:
           schema:
-            type: array
             $ref: "#/components/schemas/SearchResponse"
+    JokeStatusResponse:
+      description: this contains random joke
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/JokeResponse"
 
   schemas:
     CategoryResponse:
@@ -69,6 +72,13 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/People"
+    JokeResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: "#/components/schemas/Jokes"
     Jokes:
       type: object
       properties:
@@ -178,5 +188,20 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
           $ref: "#/components/responses/SearchStatusResponse"
+  /chuck/random:
+    get:
+      summary: Get random joke by category
+      description: get random joke
+      operationId: getRandomJoke
+      tags:
+        - chuck
+      parameters:
+        - in: query
+          name: category
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: "#/components/responses/JokeStatusResponse"

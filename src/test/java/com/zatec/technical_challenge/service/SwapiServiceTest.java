@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,7 +71,8 @@ class SwapiServiceTest {
     @Test
     void when_fetchStarWarsPeople_andApiReturns500_InternalServerError_should_throwException() {
         Mockito.when(swapiFeignClient.fetchPeople(Mockito.nullable(Integer.class))).thenThrow(new FeignException.InternalServerError( "Internal Server Error", Request.create(Request.HttpMethod.GET,"/", new HashMap<>(), null, null,null), null, new HashMap<>()));
-        Assertions.assertThrows(ZatecException.class, () -> swapiService.fetchStarWarsPeople());
+        ZatecException zatecException = Assertions.assertThrows(ZatecException.class, () -> swapiService.fetchStarWarsPeople());
+        Assertions.assertEquals(HttpStatus.EXPECTATION_FAILED, zatecException.getHttpStatus());
     }
 
     @Test
@@ -114,7 +116,8 @@ class SwapiServiceTest {
     @Test
     void when_searchStarWarsPeopleWithPageNumber_andApiReturn500_InternalServerError_should_throwException() {
         Mockito.when(swapiFeignClient.searchPeople(Mockito.nullable(String.class), Mockito.nullable(Integer.class))).thenThrow(new FeignException.InternalServerError( "Internal Server Error", Request.create(Request.HttpMethod.GET,"/", new HashMap<>(), null, null,null), null, new HashMap<>()));
-        Assertions.assertThrows(ZatecException.class, () -> swapiService.searchStarWarsPeople(null));
+        ZatecException zatecException = Assertions.assertThrows(ZatecException.class, () -> swapiService.searchStarWarsPeople(null));
+        Assertions.assertEquals(HttpStatus.EXPECTATION_FAILED, zatecException.getHttpStatus());
     }
 
 }

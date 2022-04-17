@@ -2,6 +2,8 @@ package com.zatec.technical_challenge.controller;
 
 import com.zatec.technical_challenge.api.ChuckApi;
 import com.zatec.technical_challenge.dto.CategoryResponseDto;
+import com.zatec.technical_challenge.dto.JokeResponseDto;
+import com.zatec.technical_challenge.dto.JokesDto;
 import com.zatec.technical_challenge.exception.ZatecException;
 import com.zatec.technical_challenge.service.ChuckService;
 import com.zatec.technical_challenge.util.Constant;
@@ -30,6 +32,20 @@ public class ChuckController implements ChuckApi {
             categoryResponseDto.setData(Collections.emptyList());
             categoryResponseDto.setMessage(e.getMessage());
             return ResponseEntity.status(e.getHttpStatus()).body(categoryResponseDto);
+        }
+    }
+
+    @Override
+    public ResponseEntity<JokeResponseDto> getRandomJoke(String category) {
+        JokeResponseDto jokeResponseDto = new JokeResponseDto();
+        try {
+            JokesDto jokesDto = chuckService.fetchRandomJokeByCategory(category);
+            jokeResponseDto.setData(jokesDto);
+            jokeResponseDto.setMessage(Constant.SUCCESS_MESSAGE);
+            return ResponseEntity.ok(jokeResponseDto);
+        } catch (ZatecException e) {
+            jokeResponseDto.setMessage(e.getMessage());
+            return ResponseEntity.status(e.getHttpStatus()).body(jokeResponseDto);
         }
     }
 }

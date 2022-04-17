@@ -1,5 +1,6 @@
 package com.zatec.technical_challenge.rest;
 
+import com.zatec.technical_challenge.dto.JokesDto;
 import com.zatec.technical_challenge.dto.JokesResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,5 +16,8 @@ public interface ChuckFeignClient {
 
     @GetMapping("/search")
     JokesResponse searchJokes(@RequestParam String query);
+    
+    @GetMapping("/random")
+    JokesDto randomJoke(@RequestParam String category);
 
 }

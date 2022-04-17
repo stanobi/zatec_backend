@@ -2,6 +2,8 @@ package com.zatec.technical_challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zatec.technical_challenge.dto.CategoryResponseDto;
+import com.zatec.technical_challenge.dto.JokeResponseDto;
+import com.zatec.technical_challenge.dto.JokesDto;
 import com.zatec.technical_challenge.exception.ZatecException;
 import com.zatec.technical_challenge.service.ChuckService;
 import com.zatec.technical_challenge.util.Constant;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ChuckController.class)
@@ -64,6 +67,40 @@ class ChuckControllerTest {
         Assertions.assertNotNull(categoryResponseDto);
         Assertions.assertEquals("Exception occurred", categoryResponseDto.getMessage());
         Assertions.assertTrue(categoryResponseDto.getData().isEmpty());
+    }
+
+    @Test
+    void test_when_fetchRandomJokeByCategory_ReturnsRandomJoke() throws Exception {
+        JokesDto jokesDto = new JokesDto();
+        jokesDto.setCategories(List.of("animal"));
+        jokesDto.setCreatedAt("2020-01-05 13:42:19.576875");
+        jokesDto.setIconUrl("https://assets.chucknorris.host/img/avatar/chuck-norris.png");
+        jokesDto.setId("xwjic1sws_yohsfefndaiw");
+        jokesDto.setUpdatedAt("2020-01-05 13:42:19.576875");
+        jokesDto.setUrl("https://api.chucknorris.io/jokes/xwjic1sws_yohsfefndaiw");
+        jokesDto.setValue("Chuck Norris once kicked a horse in the chin. Its decendants are known today as Giraffes.");
+        Mockito.when(chuckService.fetchRandomJokeByCategory(Mockito.anyString())).thenReturn(jokesDto);
+
+        MockHttpServletResponse mockHttpServletResponse = getMockMvc(mockMvc, MockMvcRequestBuilders.get("/chuck/random?category=animal"));
+        Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+
+        JokeResponseDto jokeResponseDto = new ObjectMapper().readValue(mockHttpServletResponse.getContentAsString(), JokeResponseDto.class);
+        Assertions.assertNotNull(jokeResponseDto);
+        Assertions.assertEquals(Constant.SUCCESS_MESSAGE, jokeResponseDto.getMessage());
+        Assertions.assertEquals(jokesDto.getValue(), jokeResponseDto.getData().getValue());
+    }
+
+    @Test
+    void test_when_fetchRandomJokeByCategory_throwsException() throws Exception {
+        Mockito.when(chuckService.fetchRandomJokeByCategory(Mockito.anyString())).thenThrow(new ZatecException(HttpStatus.NOT_FOUND, "No jokes for category \"an\" found."));
+
+        MockHttpServletResponse mockHttpServletResponse = getMockMvc(mockMvc, MockMvcRequestBuilders.get("/chuck/random?category=animal"));
+        Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), mockHttpServletResponse.getStatus());
+
+        JokeResponseDto jokeResponseDto = new ObjectMapper().readValue(mockHttpServletResponse.getContentAsString(), JokeResponseDto.class);
+        Assertions.assertNotNull(jokeResponseDto);
+        Assertions.assertEquals("No jokes for category \"an\" found.", jokeResponseDto.getMessage());
+        Assertions.assertNull(jokeResponseDto.getData());
     }
 
     public static MockHttpServletResponse getMockMvc(MockMvc mockMvc, MockHttpServletRequestBuilder mockHttpServletRequestBuilder)
