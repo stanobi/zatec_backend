@@ -8,8 +8,10 @@ import com.zatec.technical_challenge.service.SearchService;
 import com.zatec.technical_challenge.util.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(originPatterns = "*")
 @RestController
 @RequiredArgsConstructor
 public class SearchController implements SearchApi {

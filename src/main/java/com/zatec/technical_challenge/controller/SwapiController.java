@@ -8,11 +8,13 @@ import com.zatec.technical_challenge.service.SwapiService;
 import com.zatec.technical_challenge.util.Constant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin(originPatterns = "*")
 @RestController
 @RequiredArgsConstructor
 public class SwapiController implements SwapiApi {
